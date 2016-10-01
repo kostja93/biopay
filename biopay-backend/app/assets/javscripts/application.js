@@ -56,9 +56,14 @@ $(document).ready(function(){
               full_price += item.price;
               checkoutList.append($li);
           });
+          full_price = full_price.toFixed(2);
           var $li = $('<li class="collection-item avatar"></li>');
           $li.append('<i class="material-icons circle">star</i><span class="title"><b>Full Price</b></span><p>'+full_price+' €</p>');
           checkoutList.append($li);
+
+          $('#checkout_info').html('<h5 class="white-text">Einkauf scannen</h5>');
+          $('#checkout_info').append('<p>Items: '+list.length+'</p>');
+          $('#checkout_info').append('<p>Price: '+full_price+'</p>');
       };
 
       $(buyableItems).each(function(i, item) {
@@ -101,11 +106,6 @@ $(document).ready(function(){
 
           $('#payed').html('Sending Picture to Microsoft Service');
           $('.progress').html('<div class="indeterminate"></div>');
-
-          window.setTimeout(function() {
-              $('.progress').html('<div class="determinate" style="width: 100%"></div>');
-              $('#payed').html('IBAN Available<i class="material-icons green-text">done</i>');
-          }, 2000)
       }
 
       if (key.keyCode == 13) {

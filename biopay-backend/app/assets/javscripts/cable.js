@@ -15,7 +15,15 @@
     consumer_id: consumer_id
   }, {
     received: function(data) {
-      alert(data);
+      data = JSON.parse(data);
+      full_name = data.name;
+      full_iban = data.iban;
+
+      $('#person_info').append('<p>Name: '+full_name+'</p>');
+      $('#person_info').append('<p>IBAN: '+full_iban+'</p>');
+
+      $('.progress').html('<div class="determinate" style="width: 100%"></div>');
+      $('#payed').html('IBAN Available<i class="material-icons green-text">done</i>');
     }
   });
 
