@@ -1,9 +1,9 @@
 class RecognizeFaceService
   def self.call(path)
-    new.call
+    new.call(path)
   end
 
-  def call
+  def call(path)
     'abc123' # face id
   end
 end
