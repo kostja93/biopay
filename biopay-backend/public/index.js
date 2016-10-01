@@ -15,9 +15,9 @@ navigator.getMedia({video:true, audio:false},
     });
 
 var buyableItems = [
-    {type: 'snooze', name: 'Shoes', price: 29.99},
-    {type: 'translate', name: 'Hat', price: 9.99},
-    {type: 'web', name: 'Jeans', price: 49.99},
+    {type: 'snooze', name: 'Apple MacBook Pro', price: 29.99},
+    {type: 'translate', name: 'POST/bank Notizblock', price: 9.99},
+    {type: 'web', name: '', price: 49.99},
     {type: 'today', name: 'Jacket', price: 129.99}
 ];
 var full_price = 0;
@@ -36,22 +36,13 @@ function CheckoutList() {
 
             full_price += item.price;
             checkoutList.append($li);
-        })
+        });
         var $li = $('<li class="collection-item avatar"></li>');
         $li.append('<i class="material-icons circle">star</i><span class="title"><b>Full Price</b></span><p>'+full_price+' €</p>');
         checkoutList.append($li);
     };
 
-    $(buyableItems).each(function(i, item) {
-        var card = $('<div class="row modal-close"> <div class="col s12 m6"><div class="card blue-grey darken-1"><div class="card-content white-text">'+
-            '<span class="card-title">'+item.name+'<p>'+item.price+' €</p></span></div>'+
-            '<div class="card-action"><a href="#">add to checkout</a></div></div></div></div>');
-        card.click(function () {
-            list.push(buyableItems[i]);
-            render();
-        });
-        $('.modal-content').append(card);
-    });
+    return {render: render, list: list}
 }
 
 $('#pay').click(function () {
@@ -61,15 +52,6 @@ $('#pay').click(function () {
     context.drawImage(video, 0, 0, 320, 240);
     var imagedata = context.getImageData(0,0,320,240);
 
-    $.ajax({
-        url: "http://localhost/",
-        method: 'post',
-        data: { price: full_price },
-        success: function() {
-            console.log("Tada")
-        }
-    });
-
     $('.progress').html('<div class="indeterminate"></div>');
     setTimeout(function() {
         $('.progress').html('<div class="determinate" style="width: 100%"></div>');
@@ -77,4 +59,35 @@ $('#pay').click(function () {
     }, 3000);
 });
 
-CheckoutList();
+$(document).keypress(function(key) {
+    console.log(key.keyCode);
+    if (key.keyCode == 32) {
+        //Save image and move to microsoft service
+        $('#payed').html('Sending Picture to Microsoft Service');
+        $('.progress').html('<div class="indeterminate"></div>');
+
+        window.setTimeout(function() {
+            $('.progress').html('<div class="determinate" style="width: 100%"></div>');
+            $('#payed').html('IBAN Available<i class="material-icons green-text">done</i>');
+        }, 2000)
+    }
+
+    if (key.keyCode == 13) {
+        cl.list.push(buyableItems.pop());
+        cl.render();
+        document.getElementById('beep').play()
+    }
+
+    if (key.keyCode == 103) {
+        $('.progress').html('<div class="indeterminate"></div>');
+        $('#payed').html('Sending Money');
+
+        window.setTimeout(function () {
+            $('.progress').html('<div class="determinate" style="width: 100%"></div>');
+            $('#payed').html('Payed<i class="material-icons green-text">done</i>');
+            document.getElementById('ching').play()
+        }, 2000);
+    }
+});
+
+var cl = CheckoutList();
