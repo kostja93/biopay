@@ -47,7 +47,15 @@ class PostbankApi
     }
     response = client['/credittransfer'].post(transfer.to_json)
     json = JSON.parse(response.body)
-    json['links'].find {|link| link['rel'] == 'self' }['href']
+
+    if links = json['links']
+      if link = links.find {|this_link| this_link['rel'] == 'self'}
+        link['href']
+      end
+    end
+  rescue RestClient::ExceptionWithResponse => e
+    puts "Error creating credit transfer: #{e.inspect}"
+    false
   end
 
   def watch_credit_transfer(endpoint)
@@ -58,11 +66,22 @@ class PostbankApi
       tries -= 1
       response = client(used_base_uri: endpoint).get
       json = JSON.parse(response.body)
-      success = json['authorizationDevice']['authorizationState'].downcase == 'done' || tries <= 0
-      break if success
+
+      if device = json['authorizationDevice']
+        if state = device['authorizationState']
+          if state.downcase == 'done'
+            success = true
+          end
+        end
+      end
+
+      break if success || tries <= 0
     end
 
     success
+  rescue RestClient::ExceptionWithResponse => e
+    puts "Error watching credit transfer: #{e.inspect}"
+    false
   end
 
   def credit_transfer_template
