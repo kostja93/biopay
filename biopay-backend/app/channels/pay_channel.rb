@@ -14,6 +14,6 @@ class PayChannel < ApplicationCable::Channel
     result = PostbankTransferService.(amount)
     response.merge!(result: 'success') if result
 
-    ActionCable.server.broadcast("pay_#{consumer_id}", result.to_json)
+    ActionCable.server.broadcast("pay_#{consumer_id}", response.to_json)
   end
 end

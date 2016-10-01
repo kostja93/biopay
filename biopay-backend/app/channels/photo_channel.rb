@@ -5,7 +5,7 @@ class PhotoChannel < ApplicationCable::Channel
   def receive(data)
     consumer_id = params[:consumer_id]
     image = Base64.decode64(data['image'])
-    Tempfile.open do |f|
+    Tempfile.open('image') do |f|
       f.binmode
       f.write image
       f.flush
