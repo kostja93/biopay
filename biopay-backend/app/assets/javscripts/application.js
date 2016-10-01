@@ -14,6 +14,9 @@
 //= require jquery_ujs
 //= require_tree .
 
+var full_name = "";
+var full_iban = "";
+
 $(document).ready(function(){
   $('.modal-trigger').leanModal();
   $('#video').materialbox();
@@ -73,21 +76,29 @@ $(document).ready(function(){
   }
 
   $('#pay').click(function () {
-      var canvas = document.getElementById('canvas');
-      var context = canvas.getContext('2d');
-      var video = document.getElementById('video');
-      context.drawImage(video, 0, 0, 320, 240);
-      var bytes = canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, '');
-
-      App.photoChannel.send({image: bytes});
+      App.payChannel.send({amount: full_price, name: full_name, iban: full_iban});
 
       $('.progress').html('<div class="indeterminate"></div>');
+      $('#payed').html('Sending Money');
+
+      window.setTimeout(function () {
+          $('.progress').html('<div class="determinate" style="width: 100%"></div>');
+          $('#payed').html('Payed<i class="material-icons green-text">done</i>');
+          document.getElementById('ching').play()
+      }, 2000);
   });
 
   $(document).keypress(function(key) {
       console.log(key.keyCode);
       if (key.keyCode == 32) {
-          //Save image and move to microsoft service
+
+          var canvas = document.getElementById('canvas');
+          var context = canvas.getContext('2d');
+          var video = document.getElementById('video');
+          context.drawImage(video, 0, 0, 320, 240);
+          var bytes = canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, '');
+          App.photoChannel.send({image: bytes});
+
           $('#payed').html('Sending Picture to Microsoft Service');
           $('.progress').html('<div class="indeterminate"></div>');
 
@@ -101,17 +112,6 @@ $(document).ready(function(){
           cl.list.push(buyableItems.pop());
           cl.render();
           document.getElementById('beep').play()
-      }
-
-      if (key.keyCode == 103) {
-          $('.progress').html('<div class="indeterminate"></div>');
-          $('#payed').html('Sending Money');
-
-          window.setTimeout(function () {
-              $('.progress').html('<div class="determinate" style="width: 100%"></div>');
-              $('#payed').html('Payed<i class="material-icons green-text">done</i>');
-              document.getElementById('ching').play()
-          }, 2000);
       }
   });
   var cl = CheckoutList();

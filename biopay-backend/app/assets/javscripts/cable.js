@@ -20,5 +20,12 @@
   });
 
   App.photoChannel = App.cable.subscriptions.create({channel: 'PhotoChannel', consumer_id: consumer_id});
-  App.payChannel = App.cable.subscriptions.create({channel: 'PayChannel', consumer_id: consumer_id});
+  App.payChannel = App.cable.subscriptions.create({
+    channel: 'PayChannel',
+    consumer_id: consumer_id
+  }, {
+    received: function (data) {
+      alert(data);
+    }
+  });
 }).call(this);
