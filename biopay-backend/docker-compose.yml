@@ -1,0 +1,10 @@
+version: '2'
+services:
+  devdb:
+    image: postgres
+    ports:
+      - 5432
+  testdb:
+    image: postgres
+    ports:
+      - 5432
