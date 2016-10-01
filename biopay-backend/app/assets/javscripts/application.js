@@ -85,12 +85,6 @@ $(document).ready(function(){
 
       $('.progress').html('<div class="indeterminate"></div>');
       $('#payed').html('Sending Money');
-
-      window.setTimeout(function () {
-          $('.progress').html('<div class="determinate" style="width: 100%"></div>');
-          $('#payed').html('Payed<i class="material-icons green-text">done</i>');
-          document.getElementById('ching').play()
-      }, 2000);
   });
 
   $(document).keypress(function(key) {

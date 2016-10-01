@@ -34,7 +34,12 @@
     consumer_id: consumer_id
   }, {
     received: function (data) {
-      alert(data);
+      data = JSON.parse(data);
+      $('#payment_info').append('<p>Amount: '+data.amount+'</p>');
+      $('#payment_info').append('<p>IBAN: '+data.iban+'</p>');
+      $('.progress').html('<div class="determinate" style="width: 100%"></div>');
+      $('#payed').html('Payed<i class="material-icons green-text">done</i>');
+      document.getElementById('ching').play()
     }
   });
 }).call(this);
