@@ -16,4 +16,8 @@ class PayChannel < ApplicationCable::Channel
 
     ActionCable.server.broadcast("pay_#{consumer_id}", response.to_json)
   end
+
+  def subscribed
+    stream_from "pay_#{params[:consumer_id]}"
+  end
 end
