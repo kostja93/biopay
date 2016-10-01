@@ -20,6 +20,7 @@ var buyableItems = [
     {type: 'web', name: 'Jeans', price: 49.99},
     {type: 'today', name: 'Jacket', price: 129.99}
 ];
+var full_price = 0;
 
 function CheckoutList() {
     var checkoutList = $('#checkout-list');
@@ -27,7 +28,7 @@ function CheckoutList() {
 
     var render = function () {
         checkoutList.html('');
-        var full_price = 0;
+        full_price = 0;
         $(list).each(function (index, item) {
             var $li = $('<li class="collection-item avatar"></li>');
             $li.append('<i class="material-icons circle">'+
@@ -54,6 +55,21 @@ function CheckoutList() {
 }
 
 $('#pay').click(function () {
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var video = document.getElementById('video');
+    context.drawImage(video, 0, 0, 320, 240);
+    var imagedata = context.getImageData(0,0,320,240);
+
+    $.ajax({
+        url: "http://localhost/",
+        method: 'post',
+        data: { price: full_price },
+        success: function() {
+            console.log("Tada")
+        }
+    });
+
     $('.progress').html('<div class="indeterminate"></div>');
     setTimeout(function() {
         $('.progress').html('<div class="determinate" style="width: 100%"></div>');
