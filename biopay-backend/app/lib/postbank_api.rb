@@ -3,13 +3,78 @@ class PostbankApi
     new(ENV['POSTBANK_USER_MERCHANT'], ENV['POSTBANK_PASS_MERCHANT'])
   end
 
+  def self.merchant_account
+    {
+      iban: 'DE66100100100001744103',
+      bic: 'PBNKDEFF',
+      paymentName: 'Mariu Freudeaerc',
+      bankName: 'Postbank',
+      accountNumber: '1744103',
+      accountHolder: 'Mariu Freudeaerc'
+    }
+  end
+
   def self.customer
     new(ENV['POSTBANK_USER_CUSTOMER'], ENV['POSTBANK_PASS_CUSTOMER'])
+  end
+
+  def self.customer_account
+    {
+      iban: 'DE92100100100625037117',
+      bic: 'PBNKDEFF',
+      paymentName: 'Maria Hassaeqz',
+      bankName: 'Postbank',
+      accountNumber: '625037117',
+      accountHolder: 'Maria Hassaeqz'
+    }
   end
 
   attr_reader :username, :password
   def initialize(username, password)
     @username, @password = username, password
+  end
+
+  def create_credit_transfer(from, to, amount)
+    transfer = {
+      creditTransfer: {
+        amount: amount,
+        bookingDate: Date.today.to_s,
+        purpose: ['Bezahlung Verkauf'],
+        sender: from,
+        recipient: to
+      },
+      authorizationDevice: authorization_device.merge('authorizationState' => 'SELECTED')
+    }
+    response = client['/credittransfer'].post(transfer.to_json)
+    json = JSON.parse(response.body)
+    json['links'].find {|link| link['rel'] == 'self' }['href']
+  end
+
+  def watch_credit_transfer(endpoint)
+    tries = 10
+    success = false
+
+    loop do
+      tries -= 1
+      response = client(used_base_uri: endpoint).get
+      json = JSON.parse(response.body)
+      success = json['authorizationDevice']['authorizationState'].downcase == 'done' || tries <= 0
+      break if success
+    end
+
+    success
+  end
+
+  def credit_transfer_template
+    response = client['/credittransfer'].get
+    json = JSON.parse(response.body)
+    json['creditTransfer']
+  end
+
+  def authorization_device
+    response = client['/authorizations'].get
+    json = JSON.parse(response.body)
+    json['bestSign']['devices'].first
   end
 
   def accounts
@@ -20,7 +85,7 @@ class PostbankApi
 
   def token
     @token ||= begin
-      response = client(token_headers)["/token?username=#{username}&password=#{password}"].post({})
+      response = client(used_headers: token_headers)["/token?username=#{username}&password=#{password}"].post({})
       json = JSON.parse(response.body)
       json['token']
     end
@@ -49,8 +114,8 @@ class PostbankApi
     }
   end
 
-  def client(used_headers = headers)
+  def client(used_base_uri: base_uri, used_headers: headers)
     RestClient.log = 'stdout'
-    RestClient::Resource.new(base_uri, headers: used_headers)
+    RestClient::Resource.new(used_base_uri, headers: used_headers)
   end
 end
