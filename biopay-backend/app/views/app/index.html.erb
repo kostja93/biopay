@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="row">
+        <div class="col s8">
+            <ul class="collection" id="checkout-list">
+            </ul>
+        </div>
+        <div class="col s4">
+            <video id="video" width="320" height="240" autoplay></video>
+        </div>
+        <div class="col s12">
+            <div class="progress">
+            </div>
+        </div>
+        <div class="col s8">
+            <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modal1"><i class="material-icons">add</i></a>
+            <a class="btn-floating btn-large waves-effect waves-light green" id="pay"><i class="material-icons">payment</i></a>
+        </div>
+        <div class="col s4" id="payed">
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Structure -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h4>Add to Checkout</h4>
+    </div>
+</div>
+
+<canvas id="canvas" height="240" style="display: none"></canvas>
+<audio id="ching" src="audio/ching.wav" preload="auto"></audio>
+<audio id="beep" src="audio/beep.wav" preload="auto"></audio>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>

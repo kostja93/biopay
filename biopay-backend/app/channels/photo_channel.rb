@@ -1,14 +1,22 @@
+require 'base64'
+require 'tempfile'
+
 class PhotoChannel < ApplicationCable::Channel
   def receive(data)
     consumer_id = params[:consumer_id]
-    iban = RecognizeFaceService.(data)
-    amount = 1
-    if iban
-      result = PostbankTransferService.(amount)
-      ActionCable.server.broadcast("identification_#{consumer_id}", result ? 'success' : 'fail')
-    else
-      ActionCable.server.broadcast("identification_#{consumer_id}", 'fail')
-    end
+    image = Base64.decode64(data['image'])
+    Tempfile.open do |f|
+      f.binmode
+      f.write image
+      f.close
 
+      result = RecognizeFaceService.(f.path)
+      if result[:result] == 'success'
+        payload = { name: result[:name], iban: result[:iban], result: 'success' }
+        ActionCable.server.broadcast("identification_#{consumer_id}", payload.to_json)
+      else
+        ActionCable.server.broadcast("identification_#{consumer_id}", { result: 'fail' })
+      end
+    end
   end
 end
