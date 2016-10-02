@@ -100,6 +100,7 @@ $(document).ready(function(){
 
           $('#payed').html('Sending Picture to Microsoft Service');
           $('.progress').html('<div class="indeterminate"></div>');
+          $('#eye').show()
       }
 
       if (key.keyCode == 13) {
