@@ -100,7 +100,7 @@ $(document).ready(function(){
 
           $('#payed').html('Sending Picture to Microsoft Service');
           $('.progress').html('<div class="indeterminate"></div>');
-          $('#eye').show()
+          $('.eye').show();
       }
 
       if (key.keyCode == 13) {
@@ -110,4 +110,14 @@ $(document).ready(function(){
       }
   });
   var cl = CheckoutList();
+
+    var hide = function () {
+        $('#eye').hide('fade');
+        setTimeout(show, 1000);
+    };
+    var show = function () {
+        $('#eye').show('fade');
+        setTimeout(hide, 1000);
+    };
+    hide();
 });

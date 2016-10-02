@@ -25,7 +25,7 @@
 
       $('.progress').html('<div class="determinate" style="width: 100%"></div>');
       $('#payed').html('IBAN Available<i class="material-icons green-text">done</i>');
-      $('#eye').hide();
+      $('.eye').hide();
     }
   });
 
