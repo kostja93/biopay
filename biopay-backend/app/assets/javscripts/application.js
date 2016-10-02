@@ -34,10 +34,10 @@ $(document).ready(function(){
       });
 
   var buyableItems = [
-      {type: 'snooze', name: 'Apple MacBook Pro', price: 29.99},
-      {type: 'translate', name: 'POST/bank Notizblock', price: 9.99},
-      {type: 'web', name: '', price: 49.99},
-      {type: 'today', name: 'Jacket', price: 129.99}
+      {type: 'snooze', name: 'Chips', price: 2.99},
+      {type: 'translate', name: 'Salzstangen', price: 0.99},
+      {type: 'web', name: 'Erdnuss Flips', price: 1.99},
+      {type: 'today', name: 'Kasten Rothaus', price: 15.99}
   ];
   var full_price = 0;
 
