@@ -12,10 +12,10 @@ class PhotoChannel < ApplicationCable::Channel
 
       result = RecognizeFaceService.(f.path)
       if result[:result] == 'success'
-        payload = { name: result[:name], iban: result[:iban], result: 'success' }
+        payload = { name: result[:name], faceDetails: result[:face_details], iban: result[:iban], result: 'success' }
         ActionCable.server.broadcast("identification_#{consumer_id}", payload.to_json)
       else
-        ActionCable.server.broadcast("identification_#{consumer_id}", { result: 'fail' }.to_json)
+        ActionCable.server.broadcast("identification_#{consumer_id}", { result: 'fail', message: result[:message] }.to_json)
       end
     end
   end

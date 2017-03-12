@@ -9,7 +9,7 @@ class RecognizeFaceService
     api_key = ENV['COGNITION_API_KEY']
 
     begin
-      result = RestClient.post "#{api_base_url}/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false&returnFaceId=true&returnFaceLandmarks=false", File.new(path, 'rb'), content_type: 'application/octet-stream; charset=binary', :ocp_apim_subscription_key => api_key
+      result = RestClient.post "#{api_base_url}/v1.0/detect?returnFaceId=true&returnFaceLandmarks=true", File.new(path, 'rb'), content_type: 'application/octet-stream; charset=binary', :ocp_apim_subscription_key => api_key
 
       parsed_results = JSON.parse(result.body)
       return {result: "fail", message: "No face detected."} if parsed_results.empty?
@@ -26,7 +26,7 @@ class RecognizeFaceService
       puts "identified #{person_details} with confidence #{candidate["confidence"]}"
 
       user_data = JSON.parse(person_details["userData"])
-      return {result: "success", name: person_details["name"], iban: user_data["iban"]}
+      return {result: "success", face_details: parsed_results.first, name: person_details["name"], iban: user_data["iban"]}
     rescue RestClient::ExceptionWithResponse => e
       return {result: "fail", message: JSON.parse(e.response.body)["error"]["message"]}
     end

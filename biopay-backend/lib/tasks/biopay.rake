@@ -5,7 +5,7 @@ namespace :biopay do
 
     #clean up person group
     person_group = "pbh-ber-biopay"
-    api_base_url = "https://api.projectoxford.ai/face"
+    api_base_url = "https://westus.api.cognitive.microsoft.com/face"
     api_key = ENV['COGNITION_API_KEY']
 
     begin
@@ -15,7 +15,7 @@ namespace :biopay do
       RestClient.put "#{api_base_url}/v1.0/persongroups/#{person_group}", {name: 'Default Person Group'}.to_json, content_type: 'json', :ocp_apim_subscription_key => api_key
 
       #add beautiful ppl w/ beautiful faces and add face pictures to train the API
-      [{ name: "Fabian", iban: "DE750193123866413939171" }, { name: "Konstantin", iban: "DE750193123866413939171" }, { name: "Felix", iban: "DE750193123866413939171" }].each do |person|
+      [{ name: "Fabian", iban: "DE750193123866413939171" }, { name: "Konstantin", iban: "DE750193123866413939172" }, { name: "Felix", iban: "DE750193123866413939173" }].each do |person|
         response = RestClient.post "#{api_base_url}/v1.0/persongroups/#{person_group}/persons", {name: person[:name], userData: {iban: person[:iban]}.to_json}.to_json, content_type: 'json', :ocp_apim_subscription_key => api_key
 
         person_id = JSON.parse(response.body)["personId"]

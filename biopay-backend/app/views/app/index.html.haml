@@ -1,0 +1,40 @@
+.container.container-full
+  .row
+    .col-md-7
+      .row
+        .identification-container
+          %video#video{:autoplay => ""}
+          %canvas#canvas.hidden.identification-success{:height => "480", :width => "640"}
+        .row.m-t-25
+          .col-md-1
+          .col-md-9.center
+            .alert.alert-success.hidden#identification
+              %h5 Identifikation erfolgreich
+            .progress.hidden#payment-in-progress
+              .progress-bar.progress-bar-striped.active{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => "100", :role => "progressbar", :style => "width:100%"}
+            .alert.alert-info.hidden#payment-success
+              %h5 Zahlung erfolgreich
+              %p Banküberweisung - Postbank
+
+    .col-md-5
+      %center
+        %h1 Willkommen bei EDEKA
+        %h3 Einmal hin, alles.. ach ne, doch nicht.
+      .row
+        %h4 Ihr Einkauf
+        %table.table.table-striped#item-table
+          %thead
+            %tr
+              %th Produkt
+              %th Preis
+          %tbody
+          %tfoot
+            %tr
+              %th
+              %th#total
+
+
+%audio#ching{:preload => "auto", :src => "audio/ching.wav"}
+%audio#beep{:preload => "auto", :src => "audio/beep.wav"}
+  %script{:crossorigin => "anonymous", :integrity => "sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=", :src => "https://code.jquery.com/jquery-3.1.1.min.js"}
+  %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"}
